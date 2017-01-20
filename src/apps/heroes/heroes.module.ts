@@ -9,7 +9,7 @@ import { HeroesListComponent } from './components/heroes-list/heroes-list.compon
 import { HeroDetailComponent } from './components/hero-details/hero-details.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HeroService } from './services/hero.service';
-import { SfdcService } from './../../services/sfdc-client.service';
+import { SfdcService } from './../../services/sfdc.service';
 
 import { HeroesRoutingModule }     from './heroes-routing.module';
 

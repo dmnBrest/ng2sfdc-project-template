@@ -8,7 +8,7 @@ export class SfdcService {
 
 	constructor (private http: Http) {}
 
-	public remoteAction(): Promise<any> {
+	public remoteAction(service: string, method: string, data: any): Promise<any> {
 		let outData: any = {data: 'doom'};
 
 		let headers = new Headers({ 'Content-Type': 'application/json' });

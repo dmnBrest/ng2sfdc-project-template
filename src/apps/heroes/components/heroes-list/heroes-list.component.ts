@@ -1,8 +1,6 @@
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Hero } from '../../models/hero';
 import { HeroService } from '../../services/hero.service';
-import { SfdcService } from '../../../../services/sfdc-client.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,8 +15,7 @@ export class HeroesListComponent implements OnInit {
 
 	constructor(
 		private router: Router,
-		private heroService: HeroService,
-		private sfdcService: SfdcService
+		private heroService: HeroService
 	) {}
 
 	ngOnInit(): void {
@@ -27,16 +24,6 @@ export class HeroesListComponent implements OnInit {
 
 	onSelect(hero: Hero): void {
 		this.selectedHero = hero;
-
-		console.log('sfdcService call!');
-
-		this.sfdcService.remoteAction()
-		.then((results) => {
-			console.log('Results:');
-			console.log(results);
-		})
-		.catch((err) => {console.error(err)});
-
 	}
 
 	gotoDetail(): void {
