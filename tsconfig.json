@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+        "rootDirs": [
+            "./src"
+        ],
         "target": "es6",
         "module": "commonjs",
         "moduleResolution": "node",
@@ -7,12 +10,13 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "noImplicitAny": true,
-        "suppressImplicitAnyIndexErrors": true
+        "suppressImplicitAnyIndexErrors": true,
+        "typeRoots" : ["./node_modules/@types"]
     },
-    // "include": [
-    //     "src/client"
-    // ],
+    "include": [
+        "./src"
+    ],
     "exclude": [
-        "./../node_modules"
+        "./node_modules"
     ]
 }
