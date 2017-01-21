@@ -26,6 +26,7 @@
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
+    "fsevents": "^1.0.17",
     "gulp": "^3.9.1",
     "gulp-jsforce-deploy": "^1.1.2",
     "gulp-nodemon": "^2.2.1",

@@ -9,7 +9,12 @@ export class SfdcService {
 	constructor (private http: Http) {}
 
 	public remoteAction(service: string, method: string, data: any): Promise<any> {
-		let outData: any = {data: 'doom'};
+		
+		let outData: any = {
+			service: service,
+			method: method,
+			data: data
+		};
 
 		let headers = new Headers({ 'Content-Type': 'application/json' });
 		let options = new RequestOptions({ headers: headers });

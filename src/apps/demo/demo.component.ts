@@ -21,7 +21,7 @@ export class DemoComponent implements OnInit {
 	) {}
 
 	app = {
-		name: 'Demo',
+		name: 'Demo',	
 		description: 'NG2-SFDC Package Demo Appication'
 	};
 
@@ -31,9 +31,9 @@ export class DemoComponent implements OnInit {
 	
 	callRemoteService(): void {
 
-		console.log('>> CALL REMOTE !!!');
+		console.log('>> CALL REMOTE !!!!');
 
-		this.sfdcService.remoteAction('service1', 'method1', {})
+		this.sfdcService.remoteAction('NG2DemoService', 'getAccounts', {param1: 'test param1'})
 		.then((results) => {
 			console.log('Results:');
 			console.log(results);
