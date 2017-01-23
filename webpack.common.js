@@ -9,13 +9,9 @@ var modulesPath = path.join(__dirname, 'node_modules');
 var tsConfigPath =path.join(__dirname, 'tsconfig.json');
 
 var config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'utf8'));
-console.log(config);
 
 var entryFromConfig = {
     'vendor': path.join(__dirname, 'src', 'vendor.ts'),
-    // 'testx': path.join(__dirname, 'src', 'apps', 'testx', 'testx.ts'),
-    // 'testz': './src/apps/testz/testz.ts',
-    // 'heroes': './src/apps/heroes/heroes.ts',
     'globals': ['zone.js', 'reflect-metadata'],
 }
 
@@ -28,13 +24,14 @@ module.exports = {
   entry: entryFromConfig,
 
   resolve: {
-    root: [appPath],
-    modulesDirectories: [modulesPath],
-    extensions: ['', '.ts', '.js']
+    //root: [appPath],
+    //modulesDirectories: [modulesPath],
+    modules: [modulesPath],
+    extensions: ['.ts', '.js']
   },
 
   resolveLoader: {
-    root: modulesPath
+    modules: [modulesPath]
   },
 
   module: {
@@ -81,6 +78,13 @@ module.exports = {
     // new webpack.optimize.UglifyJsPlugin({
     //   compress: { warnings: true }
     // }),
+
+    new webpack.ContextReplacementPlugin(
+      // The (\\|\/) piece accounts for path separators in *nix and Windows
+      /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+      path.join(__dirname, 'src'), // location of your src
+      { }
+    ),
 
     new webpack.optimize.CommonsChunkPlugin({
       name: ['vendor', 'globals']

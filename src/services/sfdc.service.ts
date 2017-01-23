@@ -4,8 +4,6 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 @Injectable()
 export class SfdcService {
 
-	private localRequestsProxy: string = '/remoteaction/exec';
-
 	constructor (private http: Http) {}
 
 	public remoteAction(service: string, method: string, data: any): Promise<any> {
@@ -19,12 +17,12 @@ export class SfdcService {
 		let headers = new Headers({ 'Content-Type': 'application/json' });
 		let options = new RequestOptions({ headers: headers });
 
-		return this.http.post(this.localRequestsProxy, outData, options)
+		return this.http.post('/remoteaction/exec', outData, options)
 		.toPromise()
 		.then(this.extractData)
 	}
 
-	private extractData(res: Response) {
-		return res.text() || { };
+	private extractData(res: Response) {	
+		return res.json();
 	}
 }
