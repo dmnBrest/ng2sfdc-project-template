@@ -1,20 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { SfdcService } from './../../services/sfdc.service';
+import { SldsSpinnerService } from './../../slds/spinner/slds-spinner.service';
+
 
 @Component({
 selector: 'ng2-app',
-	template: `
-		<div class="slds">
-			<h1>Welcome to {{app.name}}</h1>
-			<h2>Description: {{app.description}}</h2>
-			<div>
-				<button (click)="callRemoteService()">Call SFDC</button>
-			</div>
-			<div>
-				<div *ngFor="let a of accounts">{{a.Name}}</div>
-			</div>
-		</div>
-	`
+	templateUrl: './demo.component.html' 
 })
 
 export class DemoComponent implements OnInit {
@@ -22,7 +13,8 @@ export class DemoComponent implements OnInit {
 	accounts: any[];
 
 	constructor(
-		private sfdcService: SfdcService
+		private sfdcService: SfdcService,
+		private sldsSpinnerService: SldsSpinnerService
 	) {}
 
 	app = {
@@ -35,17 +27,26 @@ export class DemoComponent implements OnInit {
 	}
 	
 	callRemoteService(): void {
-
-		console.log('>> CALL REMOTE !!!!');
-
+		this.sldsSpinnerService.showSpinner();
 		this.sfdcService.remoteAction('NG2DemoService', 'getAccounts', {param1: 'test param1'})
 		.then((results) => {
+			this.sldsSpinnerService.hideSpinner();
 			console.log('Results:');
 			console.log(results);
 			this.accounts = results.data.accounts;
 		})
 		.catch((err) => {
+			this.sldsSpinnerService.hideSpinner();
 			console.error(err)
 		});
 	}
+
+	editAccount(account: any): void {
+		console.log('Edit account: ', account);
+	}
+
+	deleteAccount(account: any): void {
+		console.log('Delete account: ', account);
+	}
+
 }

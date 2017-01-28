@@ -1,0 +1,18 @@
+<style>
+	.slds-spinner_container {
+		position: fixed;
+		top: 0;
+		right: 0;
+		left: 0;
+		bottom: 0;
+		z-index: 99999;
+	}
+</style>
+
+<div [hidden]="!show" class="slds-spinner_container">
+	<div role="status" class="slds-spinner slds-spinner--large">
+		<span class="slds-assistive-text">Loading</span>
+		<div class="slds-spinner__dot-a"></div>
+		<div class="slds-spinner__dot-b"></div>
+	</div>
+</div>

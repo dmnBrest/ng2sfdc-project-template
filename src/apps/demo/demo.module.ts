@@ -3,6 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { DemoComponent }  from './demo.component';
 import { SfdcService } from './../../services/sfdc.service';
+import { SldsSpinnerComponent } from './../../slds/spinner/slds-spinner.component';
+import { SldsSpinnerService } from './../../slds/spinner/slds-spinner.service';
+import { SldsDatatableComponent } from './../../slds/datatable/slds-datatable.component';
 
 @NgModule({
 	imports: [
@@ -10,10 +13,13 @@ import { SfdcService } from './../../services/sfdc.service';
 		HttpModule
 	],
 	declarations: [
-		DemoComponent
+		DemoComponent,
+		SldsSpinnerComponent,
+		SldsDatatableComponent
 	],
 	providers: [
-		SfdcService
+		SfdcService,
+		SldsSpinnerService
 	],
 	bootstrap: [
 		DemoComponent

@@ -1,0 +1,23 @@
+<div class="slds">
+	<h1>Welcome to {{app.name}}</h1>
+	<h2>Description: {{app.description}}</h2>
+	
+	<br />
+	
+	<div>
+		<button (click)="callRemoteService()">Call SFDC</button>
+	</div>
+	
+	<br />
+
+	<slds-datatable [items]="accounts">
+		<!--<div header>Super DATATABLE!!!</div>-->
+		<template #actions let-item="item">
+			<button class="slds-button slds-button--neutral" (click)="editAccount(item)">Edit</button>
+			<button class="slds-button slds-button--neutral" (click)="deleteAccount(item)">Delete</button>
+		</template>
+	</slds-datatable>
+	
+	<slds-spinner></slds-spinner>
+
+</div>
