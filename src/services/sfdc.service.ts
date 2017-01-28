@@ -1,16 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs';
 
 declare var Visualforce: {
 	remoting: any
 };
 
+export interface ObjectMatadataInterface {
+	name: string;
+	label: string;
+	fields: any[];
+}
+
+export interface RemoteActionResponseInterface {
+	data?: any;
+	error?: string;
+	stack?: string;
+}
+
 @Injectable()
 export class SfdcService {
 
-	constructor (private http: Http) {}
+	metadataCache: {[objectType:string]: ObjectMatadataInterface | Promise<ObjectMatadataInterface>}
 
-	public remoteAction(service: string, method: string, data: any): Promise<any> {
+	constructor (
+		private http: Http
+	) {
+		this.metadataCache = {};
+	}
+
+	public remoteAction(service: string, method: string, data: any): Promise<RemoteActionResponseInterface> {
 
 		let outData: any = {
 			service: service,
@@ -45,11 +65,61 @@ export class SfdcService {
 
 			return this.http.post('/remoteaction/exec', outData, options)
 				.toPromise()
-				.then(this.extractData)
+				.then(res => {
+					return res.json();
+				}).catch(err => {
+					console.log(err);
+				});
 		}
 	}
 
-	private extractData(res: Response) {	
-		return res.json();
+	public initObjectsMetadata(objectTypes: string[]): Promise<any> {
+		return new Promise((resolve, reject) => {
+			let resolvers: any = {};
+			
+			for (let ot of objectTypes) {
+				this.metadataCache[ot] = new Promise<ObjectMatadataInterface>((resolve, reject) => {
+					resolvers[ot] = resolve;
+				});
+			}
+			this.remoteAction('NG2DemoService', 'getObjectsMetadata', {objectTypes: objectTypes})
+			.then(res => {
+				if (res.data && res.data.meta) {
+					for (let ot of objectTypes) {
+						resolvers[ot](res.data.meta[ot]);
+					}
+					Object.assign(this.metadataCache, res.data.meta);
+					resolve(true);
+				} else {
+					reject(res);
+				}
+			});
+		});
 	}
+
+	public getObjectMetadata(objectType: string): Promise<ObjectMatadataInterface> {
+		if (this.metadataCache[objectType] && this.metadataCache[objectType] instanceof Promise) {
+			return this.metadataCache[objectType] as Promise<ObjectMatadataInterface>;
+		} else if (this.metadataCache[objectType]) {
+			return new Promise<ObjectMatadataInterface>((resolve, reject) => {
+				resolve(this.metadataCache[objectType]);
+			});
+		} else {
+			let p = new Promise<ObjectMatadataInterface>((resolve, reject) => {
+				this.remoteAction('NG2DemoService', 'getObjectsMetadata', {objectTypes: [objectType]})
+				.then(res => {
+					if (res.data && res.data.meta) {
+						Object.assign(this.metadataCache, res.data.meta);
+						resolve(res.data.meta[objectType]);
+					} else {
+						reject(res);
+					}
+				});
+			});
+			this.metadataCache[objectType] = p;
+			return p;
+		}
+		
+	}
+
 }

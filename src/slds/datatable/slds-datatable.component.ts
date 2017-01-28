@@ -1,4 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, ContentChild, TemplateRef } from '@angular/core';
+import { SfdcService, ObjectMatadataInterface } from './../../services/sfdc.service';
+import { SldsSpinnerService } from './../../slds/spinner/slds-spinner.service';
 
 @Component({
 	selector: 'slds-datatable',
@@ -8,15 +10,29 @@ import { Component, OnInit, OnDestroy, Input, ContentChild, TemplateRef } from '
 export class SldsDatatableComponent implements OnInit, OnDestroy {
 	@ContentChild('actions') actionsTemplate: TemplateRef<any>;
 
-
 	@Input() items: any[];
-
-	constructor() {
+	@Input() objectType: string;
+	@Input() fields: string[];
+	objectMetadata: ObjectMatadataInterface
+	
+	constructor(
+		private sfdcService: SfdcService,
+		private sldsSpinnerService: SldsSpinnerService
+	) {
 		
 	}
 
 	ngOnInit(): void {
-		
+		console.log('Datatable init');
+		if (this.objectType) {
+			this.sldsSpinnerService.showSpinner();
+			this.sfdcService.getObjectMetadata(this.objectType).then((meta) => {
+				this.sldsSpinnerService.hideSpinner();
+				this.objectMetadata = meta;
+				console.log('meta:');
+				console.log(meta);
+			});
+		}
 	}
 
 	ngOnDestroy() {

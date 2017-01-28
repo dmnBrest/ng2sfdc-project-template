@@ -11,7 +11,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HeroService } from './services/hero.service';
 import { SfdcService } from './../../services/sfdc.service';
 
-import { HeroesRoutingModule }     from './heroes-routing.module';
+import { HeroesRoutingModule } from './heroes-routing.module';
 
 @NgModule({
 	imports: [

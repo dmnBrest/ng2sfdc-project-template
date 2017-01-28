@@ -7,16 +7,15 @@ export class SldsSpinnerService {
 
 	level: number = 0;
 
-	private showChangeSubject = new Subject<boolean>();
-	showChange$ = this.showChangeSubject.asObservable();
+	private showChangeStream = new Subject<boolean>();
 
 	getShow():Observable<boolean> {
-		return this.showChangeSubject.asObservable();
+		return this.showChangeStream.asObservable();
 	}
 
 	showSpinner():void {
 		if (this.level == 0) {
-			this.showChangeSubject.next(true);
+			this.showChangeStream.next(true);
 		}
 		this.level++;
 	} 
@@ -24,7 +23,7 @@ export class SldsSpinnerService {
 	hideSpinner():void {
 		this.level--;
 		if (this.level == 0) {
-			this.showChangeSubject.next(false);
+			this.showChangeStream.next(false);
 		}
 	}
 

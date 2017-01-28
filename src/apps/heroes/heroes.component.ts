@@ -4,8 +4,8 @@ import { Component } from '@angular/core';
 	selector: 'ng2-app',
 	template: `
 	<h1>{{title}}</h1>
-	<a routerLink="/dashboard">Dashboard</a>
-	<a routerLink="/list">Heroes</a>
+	<a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
+	<a routerLink="/list" routerLinkActive="active-link">Heroes</a>
 	<router-outlet></router-outlet>
 	`,
 	styleUrls: ['./heroes.component.css']

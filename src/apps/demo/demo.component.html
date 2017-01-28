@@ -1,22 +1,52 @@
-<div class="slds">
-	<h1>Welcome to {{app.name}}</h1>
-	<h2>Description: {{app.description}}</h2>
-	
-	<br />
-	
-	<div>
-		<button (click)="callRemoteService()">Call SFDC</button>
-	</div>
-	
-	<br />
+<style>
+	header {
+		background: #2B3643;
+		padding: 15px;
+		color:  #f0f0f0;
+	}
+	header > div {
+		display: inline-block;
+	}
+	ul.c-menu {
+		background-color: #364150;
+	}
+	ul.c-menu li {
+		display: inline-block;
+	}
+	ul.c-menu li:hover {
+		background-color: #3E4B5C;
+	}
+	ul.c-menu li a {
+		color:  #f0f0f0;
+		display: inline-block;
+		padding: 15px 20px
+	}
+	ul.c-menu li a, ul.c-menu li a:hover {
+		text-decoration: none;
+	}
+	.c-menu-active {
+		background-color: #3E4B5C;
+	}
+</style>
 
-	<slds-datatable [items]="accounts">
-		<!--<div header>Super DATATABLE!!!</div>-->
-		<template #actions let-item="item">
-			<button class="slds-button slds-button--neutral" (click)="editAccount(item)">Edit</button>
-			<button class="slds-button slds-button--neutral" (click)="deleteAccount(item)">Delete</button>
-		</template>
-	</slds-datatable>
+<!-- for inspiration http://keenthemes.com/preview/metronic/theme/admin_1/index.html -->
+
+<div class="slds">
+
+	<header>
+		<div class="slds-text-heading--large">
+			<span style="color: #f0f0f0;">NG2-LIGHTNING</span>
+			<span style="color: #12B9D7">DEMO</span>
+		</div>
+	</header>
+	<ul class="c-menu">
+		<li><a routerLink="/home" routerLinkActive="c-menu-item-active">Home</a></li>
+		<li><a routerLink="/accounts" routerLinkActive="c-menu-item-active">Accounts</a></li>
+	</ul>
+
+	<div class="c-main-container">
+		<router-outlet></router-outlet>
+	</div>
 	
 	<slds-spinner></slds-spinner>
 
