@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs';
+import * as _ from 'lodash';
 
 declare var Visualforce: {
 	remoting: any
@@ -23,11 +25,13 @@ export interface RemoteActionResponseInterface {
 export class SfdcService {
 
 	metadataCache: {[objectType:string]: ObjectMatadataInterface | Promise<ObjectMatadataInterface>}
+	//metadataSources: {[objectType:string]: Observable<ObjectMatadataInterface>};
 
 	constructor (
 		private http: Http
 	) {
 		this.metadataCache = {};
+		//this.metadataSources = {};
 	}
 
 	public remoteAction(service: string, method: string, data: any): Promise<RemoteActionResponseInterface> {
@@ -73,10 +77,27 @@ export class SfdcService {
 		}
 	}
 
+	// public getObjectMetadataObserver(objectType: string): Observable<ObjectMatadataInterface> {
+	// 	if (!_.has(this.metadataSources, objectType)) {
+	// 		let source = new BehaviorSubject<ObjectMatadataInterface>(null);
+	// 		this.metadataSources[objectType] = source.asObservable();
+	// 		this.remoteAction('NG2DemoService', 'getObjectsMetadata', {objectTypes: [objectType]})
+	// 		.then(res => {
+	// 			if (res.data && res.data.meta) {
+	// 				source.error(res.data.meta);
+	// 			} else {
+	// 				source.error(res);
+	// 			}
+	// 		}).catch((err) => {
+	// 			source.error(err);
+	// 		});
+	// 	}
+	// 	return this.metadataSources[objectType];
+	// }
+
 	public initObjectsMetadata(objectTypes: string[]): Promise<any> {
 		return new Promise((resolve, reject) => {
-			let resolvers: any = {};
-			
+			let resolvers: any = {};			
 			for (let ot of objectTypes) {
 				this.metadataCache[ot] = new Promise<ObjectMatadataInterface>((resolve, reject) => {
 					resolvers[ot] = resolve;

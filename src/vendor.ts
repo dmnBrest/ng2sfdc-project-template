@@ -7,3 +7,6 @@ import '@angular/http';
 import '@angular/router';
 
 import './rxjs-extensions.ts';
+
+// Error['stackTraceLimit'] = Infinity;
+// require('zone.js/dist/long-stack-trace-zone');

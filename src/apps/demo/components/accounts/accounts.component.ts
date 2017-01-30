@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SfdcService } from './../../../../services/sfdc.service';
 import { SldsSpinnerService } from './../../../../slds/spinner/slds-spinner.service';
+import { SldsNotificationService } from './../../../../slds/notification/slds-notification.service';
 
 @Component({
 	selector: 'demo-accounts',
@@ -13,8 +14,8 @@ export class AccountsComponent implements OnInit {
 
 	constructor(
 		private sfdcService: SfdcService,
-		private sldsSpinnerService: SldsSpinnerService
-
+		private sldsSpinnerService: SldsSpinnerService,
+		private sldsNotificationService: SldsNotificationService
 	) { }
 
 	getAccounts(): void {
@@ -28,7 +29,7 @@ export class AccountsComponent implements OnInit {
 		})
 		.catch((err) => {
 			this.sldsSpinnerService.hideSpinner();
-			console.error(err)
+			console.error(err);
 		});
 	}
 

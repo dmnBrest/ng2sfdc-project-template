@@ -24,8 +24,6 @@ module.exports = {
   entry: entryFromConfig,
 
   resolve: {
-    //root: [appPath],
-    //modulesDirectories: [modulesPath],
     modules: [modulesPath],
     extensions: ['.ts', '.js']
   },

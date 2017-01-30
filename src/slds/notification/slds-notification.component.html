@@ -1,0 +1,11 @@
+<div *ngIf="message" class="slds-notify_container">
+	<div class="slds-notify slds-notify--alert slds-theme--{{message.type == MessageType.ERROR ? 'error' : (message.type == MessageType.SUCCESS ? 'success' : 'info')}} slds-theme--alert-texture" role="alert">
+		<button (click)="clearNotifications()" class="slds-button slds-notify__close slds-button--icon-inverse" title="Close">
+			<svg class="slds-button__icon" aria-hidden="true">
+				<use xlink:href="/node_modules/@salesforce-ux/design-system/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+			</svg>
+			<span class="slds-assistive-text">Close</span>
+		</button>
+		<h2>{{message.message}}</h2>
+	</div>
+</div>
