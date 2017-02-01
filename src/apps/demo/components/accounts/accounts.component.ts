@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { APP_CONFIG, IAppConfig } from './../../demo.config';
 import { SfdcService } from './../../../../services/sfdc.service';
 import { SldsSpinnerService } from './../../../../slds/spinner/slds-spinner.service';
 import { SldsNotificationService } from './../../../../slds/notification/slds-notification.service';
@@ -15,7 +16,8 @@ export class AccountsComponent implements OnInit {
 	constructor(
 		private sfdcService: SfdcService,
 		private sldsSpinnerService: SldsSpinnerService,
-		private sldsNotificationService: SldsNotificationService
+		private sldsNotificationService: SldsNotificationService,
+		@Inject(APP_CONFIG) private appConfig: IAppConfig
 	) { }
 
 	getAccounts(): void {
@@ -45,6 +47,10 @@ export class AccountsComponent implements OnInit {
 	ngOnInit(): void {
 		console.log('AccountsComponent init');
 		this.getAccounts();
+
+		console.log('== CONFIG');
+		console.log(this.appConfig);
+
 	}
 
 }

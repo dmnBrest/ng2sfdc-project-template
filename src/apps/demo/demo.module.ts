@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler, Injector, Injectable } from '@angular/core';
+import { NgModule, ErrorHandler, Injector, Injectable, OpaqueToken } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
@@ -7,12 +7,20 @@ import { DemoComponent }  from './demo.component';
 import { HomeComponent }  from './components/home/home.component';
 import { AccountsComponent }  from './components/accounts/accounts.component';
 
+import { IAppConfig, APP_CONFIG, CONFIG } from './demo.config';
+
 import { SfdcService } from './../../services/sfdc.service';
 import { SldsSpinnerComponent } from './../../slds/spinner/slds-spinner.component';
 import { SldsSpinnerService } from './../../slds/spinner/slds-spinner.service';
 import { SldsNotificationComponent } from './../../slds/notification/slds-notification.component';
 import { SldsNotificationService } from './../../slds/notification/slds-notification.service';
 import { SldsDatatableComponent } from './../../slds/datatable/slds-datatable.component';
+
+const ROUTES: Routes = [
+	{ path: 'home', component: HomeComponent },
+	{ path: 'accounts', component: AccountsComponent },	
+	{ path: '', redirectTo: '/home', pathMatch: 'full' },
+];
 
 @Injectable()
 class MyErrorHandler implements ErrorHandler {
@@ -33,17 +41,11 @@ class MyErrorHandler implements ErrorHandler {
 	}
 }	
 
-const routes: Routes = [
-	{ path: 'home', component: HomeComponent },
-	{ path: 'accounts', component: AccountsComponent },	
-	{ path: '', redirectTo: '/home', pathMatch: 'full' },
-];
-
 @NgModule({
 	imports: [
 		BrowserModule,
 		HttpModule,
-		RouterModule.forRoot(routes, { useHash: true }) 
+		RouterModule.forRoot(ROUTES, { useHash: true }) 
 	],
 	declarations: [
 		DemoComponent,
@@ -57,7 +59,8 @@ const routes: Routes = [
 		SfdcService,
 		SldsSpinnerService,
 		SldsNotificationService,
-		{provide: ErrorHandler, useClass: MyErrorHandler}
+		{provide: ErrorHandler, useClass: MyErrorHandler},
+		{provide: APP_CONFIG, useValue: CONFIG }
 	],
 	bootstrap: [
 		DemoComponent

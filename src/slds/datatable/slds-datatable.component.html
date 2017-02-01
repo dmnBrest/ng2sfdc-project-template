@@ -2,20 +2,11 @@
 
 </style>
 
-<table class="slds-table slds-table--bordered slds-table--cell-buffer">
+<table *ngIf="sObjectFieldsMeta" class="slds-table slds-table--bordered slds-table--cell-buffer">
 	<thead>
 		<tr class="slds-text-title--caps">
-			<th scope="col">
-				<div class="slds-truncate" title="Account Name">Account Name</div>
-			</th>
-			<th scope="col">
-				<div class="slds-truncate" title="Close Date">Close Date</div>
-			</th>
-			<th scope="col">
-				<div class="slds-truncate" title="Stage">Stage</div>
-			</th>
-			<th scope="col">
-				<div class="slds-truncate" title="Confidence">Confidence</div>
+			<th *ngFor="let f of sObjectFieldsMeta"  scope="col">
+				<div class="slds-truncate" title="{{f.label}}">{{f.label}}</div>
 			</th>
 			<th scope="col" class="slds-text-align--right">
 				<div class="slds-truncate" title="Contact">Actions</div>
@@ -24,17 +15,8 @@
 	</thead>
 	<tbody>
 		<tr *ngFor="let item of items">
-			<td data-label="Account Name">
-				<div class="slds-truncate" title="{{item.Name}}">{{item.Name}}</div>
-			</td>
-			<td data-label="Close Date">
-				<div class="slds-truncate" title="4/14/2015">4/14/2015</div>
-			</td>
-			<td data-label="Prospecting">
-				<div class="slds-truncate" title="Prospecting">Prospecting</div>
-			</td>
-			<td data-label="Confidence">
-				<div class="slds-truncate" title="20%">20%</div>
+			<td *ngFor="let f of sObjectFieldsMeta" data-label="Account Name">
+				<div class="slds-truncate" title="{{item[f.name]}}">{{item[f.name]}}</div>
 			</td>
 			<td data-label="Actions" class="slds-text-align--right">
 				<template 

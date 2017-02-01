@@ -1,0 +1,20 @@
+<apex:page showHeader="true" sidebar="false" docType="html-5.0">
+
+	<script>
+		// IMPORTANT for SLDS Components
+		window.sldsAssets = "{!JSENCODE(URLFOR($Resource.slds221ns, '/assets'))}";
+	</script>
+
+	<script>
+		// Load SLDS
+		var link = document.createElement( "link" );
+		link.href = window.sldsAssets + "/styles/salesforce-lightning-design-system-vf.css";
+		link.type = "text/css";
+		link.rel = "stylesheet";
+		link.media = "screen, print";
+		document.getElementsByTagName("head")[0].appendChild(link);
+	</script>
+
+	<ng2:Application appName="demo" />
+
+</apex:page>

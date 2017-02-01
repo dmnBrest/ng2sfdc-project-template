@@ -5,7 +5,7 @@
 </style>
 
 <div class="c-accounts-container">
-
+	
 	<div class="slds-grid slds-m-bottom--medium">
 		<div class="slds-col">
 			<div class="slds-text-heading--medium" style="font-size: 1.5rem;">
@@ -15,14 +15,13 @@
 		<div class="slds-col  slds-text-align--right">
 			<button class="slds-button slds-button--neutral" (click)="getAccounts()">
 				<svg class="slds-button__icon slds-button__icon" aria-hidden="true">
-					<use xlink:href="/node_modules/@salesforce-ux/design-system/assets/icons/utility-sprite/svg/symbols.svg#refresh"></use>
+					<use [attr.xlink:href]="appConfig.sldsAssets + '/icons/utility-sprite/svg/symbols.svg#refresh'"></use>
 				</svg>
 			</button>
 		</div>
 	</div>
 
-	<slds-datatable [items]="accounts" [objectType]="'Account'">
-		<!--<div header>Super DATATABLE!!!</div>-->
+	<slds-datatable [items]="accounts" [sObjectType]="'Account'" [sObjectFields]="['Name', 'CreatedDate']">
 		<template #actions let-item="item">
 			<button class="slds-button slds-button--neutral" (click)="editAccount(item)">Edit</button>
 			<button class="slds-button slds-button--neutral" (click)="deleteAccount(item)">Delete</button>
