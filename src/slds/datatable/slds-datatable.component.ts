@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, ContentChild, TemplateRef, Pipe, PipeTransform } from '@angular/core';
 import { SfdcService, ObjectMatadataInterface } from './../../services/sfdc.service';
 import { SldsSpinnerService } from './../../slds/spinner/slds-spinner.service';
-import { SldsNotificationService } from './../../slds/notification/slds-notification.service';
 import * as _ from 'lodash';
 
 // @Pipe({ name: 'fieldExistsIn' })
@@ -10,6 +9,11 @@ import * as _ from 'lodash';
 // 		return _.filter(allFields, field => _.has(fieldsMap, field.toLowerCase()));
 // 	}
 // }
+
+export interface IFieldDescription {
+	name: string;
+	type: string;
+}
 
 @Component({
 	selector: 'slds-datatable',
@@ -20,6 +24,7 @@ export class SldsDatatableComponent implements OnInit, OnDestroy {
 	@ContentChild('actions') actionsTemplate: TemplateRef<any>;
 
 	@Input() items: any[];
+	@Input() fields: string[] | IFieldDescription[] 
 	@Input() sObjectType: string;
 	@Input() sObjectFields: string[];
 	sObjectFieldsMeta: any[];
@@ -27,17 +32,15 @@ export class SldsDatatableComponent implements OnInit, OnDestroy {
 	
 	constructor(
 		private sfdcService: SfdcService,
-		private sldsSpinnerService: SldsSpinnerService,
-		private sldsNotificationService: SldsNotificationService,
-	) {
-		
-	}
+		private sldsSpinnerService: SldsSpinnerService
+	) {}
 
 	ngOnInit(): void {
 		console.log('Datatable init');
 		if (this.sObjectType) {
 			this.sldsSpinnerService.showSpinner();
-			this.sfdcService.getObjectMetadata(this.sObjectType).then((meta) => {
+			this.sfdcService.getObjectMetadata(this.sObjectType)
+			.then((meta) => {
 				this.sldsSpinnerService.hideSpinner();
 				this.sObjectMetadata = meta;
 				this.sObjectFieldsMeta = _.reduce(this.sObjectFields, (results, field) => {
@@ -46,14 +49,12 @@ export class SldsDatatableComponent implements OnInit, OnDestroy {
 					}
 					return results;
 				}, []);
-				console.log('meta:');
-				console.log(meta);
-			}).catch((err) => {
-				console.error(err);
+			})
+			.catch((err) => {
+				this.sldsSpinnerService.hideSpinner();
+				throw err;
 			});
 		}
-		console.log('fields: ', this.sObjectFields);
-		
 	}
 
 	ngOnDestroy() {

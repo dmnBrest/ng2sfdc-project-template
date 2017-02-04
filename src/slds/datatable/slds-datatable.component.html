@@ -6,7 +6,7 @@
 	<thead>
 		<tr class="slds-text-title--caps">
 			<th *ngFor="let f of sObjectFieldsMeta"  scope="col">
-				<div class="slds-truncate" title="{{f.label}}">{{f.label}}</div>
+				<div class="slds-truncate" title="{{f.label}}">{{f.label}} ({{f.type}})</div>
 			</th>
 			<th scope="col" class="slds-text-align--right">
 				<div class="slds-truncate" title="Contact">Actions</div>

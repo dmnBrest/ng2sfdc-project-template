@@ -15,7 +15,7 @@ export class DemoComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		this.sfdcService.initObjectsMetadata(['Account', 'Contact']);
+		//this.sfdcService.initObjectsMetadata(['Account', 'Contact']);
 	}
 
 }

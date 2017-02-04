@@ -25,13 +25,12 @@ export interface RemoteActionResponseInterface {
 export class SfdcService {
 
 	metadataCache: {[objectType:string]: ObjectMatadataInterface | Promise<ObjectMatadataInterface>}
-	//metadataSources: {[objectType:string]: Observable<ObjectMatadataInterface>};
 
 	constructor (
 		private http: Http
 	) {
 		this.metadataCache = {};
-		//this.metadataSources = {};
+		(<any>window).metadataCache = this.metadataCache;
 	}
 
 	public remoteAction(service: string, method: string, data: any): Promise<RemoteActionResponseInterface> {
@@ -48,15 +47,19 @@ export class SfdcService {
 					'ng2.GatewayController.remoteActionStringHandler',
 					JSON.stringify({payload: outData}),
 					function(result:any, event:any) {
+						console.log('RemoteAction '+service+'.'+method+':');
+						console.log(result);
 						if (event.type === 'exception') {
 							console.log(event);
 							reject(event.message);
 						} else {
-							result = JSON.parse(result);
+							let resJson:RemoteActionResponseInterface = JSON.parse(result);
 							if (result.error) {
-								reject(result);
+								console.error(resJson);
+								reject(result.error);
+							} else {
+								resolve(result);
 							}
-							resolve(result);
 						}
 					},
 					{ buffer: true, escape: false, timeout: 120000 }
@@ -70,9 +73,15 @@ export class SfdcService {
 			return this.http.post('/remoteaction/exec', outData, options)
 				.toPromise()
 				.then(res => {
-					return res.json();
-				}).catch(err => {
-					console.log(err);
+					console.log('RemoteAction '+service+'.'+method+':');
+					let resJson:RemoteActionResponseInterface = res.json();
+					if (resJson.error) {
+						console.error(resJson);
+						throw resJson.error;
+					} else {
+						console.log(resJson);
+					}
+					return resJson;
 				});
 		}
 	}
@@ -105,6 +114,7 @@ export class SfdcService {
 			}
 			this.remoteAction('NG2DemoService', 'getObjectsMetadata', {objectTypes: objectTypes})
 			.then(res => {
+				console.log(res);
 				if (res.data && res.data.meta) {
 					for (let ot of objectTypes) {
 						resolvers[ot](res.data.meta[ot]);
@@ -129,12 +139,14 @@ export class SfdcService {
 			let p = new Promise<ObjectMatadataInterface>((resolve, reject) => {
 				this.remoteAction('NG2DemoService', 'getObjectsMetadata', {objectTypes: [objectType]})
 				.then(res => {
-					if (res.data && res.data.meta) {
+					if (res.data && res.data.meta && res.data.meta[objectType]) {
 						Object.assign(this.metadataCache, res.data.meta);
 						resolve(res.data.meta[objectType]);
 					} else {
-						reject(res);
+						reject('Metadata for "'+objectType+'" not found.');
 					}
+				}).catch((err) => {
+					reject(err);
 				});
 			});
 			this.metadataCache[objectType] = p;

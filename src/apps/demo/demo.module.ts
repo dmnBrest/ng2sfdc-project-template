@@ -10,11 +10,13 @@ import { AccountsComponent }  from './components/accounts/accounts.component';
 import { IAppConfig, APP_CONFIG, CONFIG } from './demo.config';
 
 import { SfdcService } from './../../services/sfdc.service';
-import { SldsSpinnerComponent } from './../../slds/spinner/slds-spinner.component';
-import { SldsSpinnerService } from './../../slds/spinner/slds-spinner.service';
-import { SldsNotificationComponent } from './../../slds/notification/slds-notification.component';
+// import { SldsSpinnerComponent } from './../../slds/spinner/slds-spinner.component';
+// import { SldsSpinnerService } from './../../slds/spinner/slds-spinner.service';
+// import { SldsNotificationComponent } from './../../slds/notification/slds-notification.component';
 import { SldsNotificationService } from './../../slds/notification/slds-notification.service';
-import { SldsDatatableComponent } from './../../slds/datatable/slds-datatable.component';
+// import { SldsDatatableComponent } from './../../slds/datatable/slds-datatable.component';
+
+import { SldsModule } from './../../slds/slds.module';
 
 const ROUTES: Routes = [
 	{ path: 'home', component: HomeComponent },
@@ -32,11 +34,18 @@ class MyErrorHandler implements ErrorHandler {
 	}
 
 	handleError(error:any) {
+		let errorMessage = 'error';
 		if (error instanceof Error) {
-			this.sldsNotificationService.showError(error.message);
+			console.log('1');
+			errorMessage = (<Error>error).message;
 		} else {
-			this.sldsNotificationService.showError(error);
+			console.log('2');
+			errorMessage = error;
 		}
+		// error filtering hook
+		errorMessage = errorMessage.replace(/^Uncaught \(in promise\):/	, '');
+
+		this.sldsNotificationService.showError(errorMessage);
 		console.error(error);
 	}
 }	
@@ -45,20 +54,16 @@ class MyErrorHandler implements ErrorHandler {
 	imports: [
 		BrowserModule,
 		HttpModule,
-		RouterModule.forRoot(ROUTES, { useHash: true }) 
+		RouterModule.forRoot(ROUTES, { useHash: true }),
+		SldsModule
 	],
 	declarations: [
 		DemoComponent,
-		SldsSpinnerComponent,
-		SldsNotificationComponent,
-		SldsDatatableComponent,
 		AccountsComponent,
 		HomeComponent
 	],
 	providers: [
 		SfdcService,
-		SldsSpinnerService,
-		SldsNotificationService,
 		{provide: ErrorHandler, useClass: MyErrorHandler},
 		{provide: APP_CONFIG, useValue: CONFIG }
 	],
