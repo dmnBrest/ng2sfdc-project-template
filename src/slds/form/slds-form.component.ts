@@ -1,35 +1,29 @@
-import { Component, OnInit, OnDestroy, Input, ContentChild, TemplateRef, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, Inject } from '@angular/core';
+import { SLDS_CONFIG, ISldsConfig } from './../slds.config';
 import { SfdcService, ObjectMatadataInterface } from './../../services/sfdc.service';
 import { SldsSpinnerService } from './../../slds/spinner/slds-spinner.service';
 import * as _ from 'lodash';
 
-export interface IFieldDescription {
-	name: string;
-	type: string;
-}
-
 @Component({
-	selector: 'slds-datatable',
-	templateUrl: './slds-datatable.component.html'
-	//styleUrls: ['./heroes-list.component.css']
+	selector: 'slds-form',
+	templateUrl: './slds-form.component.html'
 })
-export class SldsDatatableComponent implements OnInit, OnDestroy {
-	@ContentChild('actions') actionsTemplate: TemplateRef<any>;
-
-	@Input() items: any[];
-	@Input() fields: string[] | IFieldDescription[] 
-	@Input() sObjectType: string;
+export class SldsFormComponent implements OnInit, OnDestroy {
+	
+	@Input() sObject: any; 
+	@Input() sObjectType: string; 
 	@Input() sObjectFields: string[];
-	sObjectFieldsMeta: any[];
 	sObjectMetadata: ObjectMatadataInterface
+	sObjectFieldsMeta: any[];
 	
 	constructor(
 		private sfdcService: SfdcService,
-		private sldsSpinnerService: SldsSpinnerService
+		private sldsSpinnerService: SldsSpinnerService,
+		@Inject(SLDS_CONFIG) private sldsConfig: ISldsConfig
 	) {}
 
 	ngOnInit(): void {
-		console.log('Datatable init');
+		console.log('Form init');
 		if (this.sObjectType) {
 			this.sldsSpinnerService.showSpinner();
 			this.sfdcService.getObjectMetadata(this.sObjectType)
@@ -47,7 +41,7 @@ export class SldsDatatableComponent implements OnInit, OnDestroy {
 				this.sldsSpinnerService.hideSpinner();
 				throw err;
 			});
-		}
+		}		
 	}
 
 	ngOnDestroy() {

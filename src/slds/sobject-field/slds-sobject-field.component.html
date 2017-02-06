@@ -2,6 +2,24 @@
 
 </style>
 
-<span>
-    SObject Field - {{objectType}}.{{fieldName}}
+<!-- outputField -->
+<span [ngSwitch]="fieldMetadata.type" *ngIf="!editable && fieldMetadata">
+	<span *ngSwitchCase="'datetime'">{{value | date:'short'}}</span>
+	<span *ngSwitchCase="'date'">{{value | date:'shortDate'}}</span>
+	<span *ngSwitchCase="'boolean'">
+		<span class="slds-icon_container" *ngIf="value===true">
+			<svg class="slds-icon slds-icon--small slds-icon-text-default" aria-hidden="true">
+				<use [attr.xlink:href]="sldsConfig.sldsAssets + '/icons/utility-sprite/svg/symbols.svg#check'"></use>
+			</svg>
+			<span class="slds-assistive-text">Description of icon</span>
+		</span>
+	</span>
+	<span *ngSwitchCase="'currency'">{{value | currency:'USD':true}}</span>
+	<span *ngSwitchDefault>{{value}}</span>
+</span>
+<!--inputField -->
+
+(type: {{fieldMetadata?.type}})
+<span [ngSwitch]="fieldMetadata.type" *ngIf="editable && fieldMetadata">
+	<input *ngSwitchDefault [ngModel]="value" (ngModelChange)="onValueChange($event)" type="text" [id]="fieldMetadata.name" [name]="fieldMetadata.name" required class="slds-input" />
 </span>

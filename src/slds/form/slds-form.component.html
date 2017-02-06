@@ -1,0 +1,16 @@
+<div *ngIf="sObjectMetadata && sObject">
+	<form class="slds-form--stacked" #spy>
+		<div *ngFor="let field of sObjectFieldsMeta" class="slds-form-element">
+			<label class="slds-form-element__label" [for]="field.name">{{field.label}}</label>
+			<div class="slds-form-element__control">
+				<slds-sobject-field
+					[(value)]="sObject[field.name]"
+					[sObjectField]="field.name"
+					[sObjectType]="sObjectType"
+					[editable]="true" 
+				></slds-sobject-field>
+			</div>
+		</div>
+	</form>
+	{{spy.className}}
+</div>

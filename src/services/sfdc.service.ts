@@ -48,17 +48,17 @@ export class SfdcService {
 					JSON.stringify({payload: outData}),
 					function(result:any, event:any) {
 						console.log('RemoteAction '+service+'.'+method+':');
-						console.log(result);
 						if (event.type === 'exception') {
-							console.log(event);
+							console.error(event);
 							reject(event.message);
 						} else {
 							let resJson:RemoteActionResponseInterface = JSON.parse(result);
-							if (result.error) {
-								console.error(resJson);
-								reject(result.error);
+							console.log(resJson);
+							if (resJson.error) {
+								console.error(resJson.error);
+								reject(resJson.error);
 							} else {
-								resolve(result);
+								resolve(resJson);
 							}
 						}
 					},

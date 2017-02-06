@@ -1,8 +1,10 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { APP_CONFIG, IAppConfig } from './../../demo.config';
 import { SfdcService } from './../../../../services/sfdc.service';
 import { SldsSpinnerService } from './../../../../slds/spinner/slds-spinner.service';
 import { SldsNotificationService } from './../../../../slds/notification/slds-notification.service';
+import * as _ from 'lodash';
+import { SldsModalComponent } from './../../../../slds/modal/slds-modal.component'
 
 @Component({
 	selector: 'demo-accounts',
@@ -11,7 +13,11 @@ import { SldsNotificationService } from './../../../../slds/notification/slds-no
 
 export class AccountsComponent implements OnInit {
 
+	@ViewChild('editAccountModal')
+	private editAccountModal: SldsModalComponent;
+
 	accounts: any[];
+	accountToEdit: any;
 
 	constructor(
 		private sfdcService: SfdcService,
@@ -37,20 +43,32 @@ export class AccountsComponent implements OnInit {
 
 	editAccount(account: any): void {
 		console.log('Edit account: ', account);
+		this.accountToEdit = _.cloneDeep(account);
+		this.editAccountModal.openModal();
 	}
 
 	deleteAccount(account: any): void {
 		console.log('Delete account: ', account);
+		alert('TODO');
 	}
+
+	saveAccount(account: any): void {
+		console.log('Save account: ', account);
+		this.getAccounts();
+		this.accountToEdit = null;
+		this.editAccountModal.closeModal();
+	} 
+
+	cancelAccountEditing(): void {
+		console.log('Cancel account editing');
+		this.accountToEdit = null;
+		this.editAccountModal.closeModal();
+	} 
 
 
 	ngOnInit(): void {
 		console.log('AccountsComponent init');
 		this.getAccounts();
-
-		console.log('== CONFIG');
-		console.log(this.appConfig);
-
 	}
 
 }

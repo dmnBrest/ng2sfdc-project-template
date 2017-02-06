@@ -9,7 +9,7 @@
 	<div class="slds-grid slds-m-bottom--medium">
 		<div class="slds-col">
 			<div class="slds-text-heading--medium" style="font-size: 1.5rem;">
-				Accounts
+				Lightning Datatable for SObject (Account)
 			</div>
 		</div>
 		<div class="slds-col  slds-text-align--right">
@@ -21,11 +21,35 @@
 		</div>
 	</div>
 
-	<slds-datatable [items]="accounts" [sObjectType]="'Account'" [sObjectFields]="['Name', 'CreatedDate']">
+	<slds-datatable 
+		[items]="accounts" 
+		[sObjectType]="'Account'" 
+		[sObjectFields]="['Name', 'Type', 'CreatedDate']">
 		<template #actions let-item="item">
 			<button class="slds-button slds-button--neutral" (click)="editAccount(item)">Edit</button>
 			<button class="slds-button slds-button--neutral" (click)="deleteAccount(item)">Delete</button>
 		</template>
 	</slds-datatable>
-	
+
+	<slds-modal #editAccountModal [large]="false" [hideHeader]="false" [hideFooter]="false" >
+		<div slds-modal-title>
+			<h2 class="slds-text-heading--medium">
+				Edit Account
+			</h2>
+		</div>
+		<div slds-modal-content>
+			<slds-form
+				[sObject]="accountToEdit"
+				[sObjectType]="'Account'"
+				[sObjectFields]="['Name', 'Type', 'CreatedDate']"
+			></slds-form>
+			<hr />
+			{{accountToEdit | json}}
+		</div>
+		<div slds-modal-footer>
+			<button class="slds-button slds-button--neutral" (click)="saveAccount(accountToEdit)">Save</button>
+			<button class="slds-button slds-button--neutral" (click)="cancelAccountEditing()">Cancel</button>
+		</div>
+	</slds-modal>
+
 </div>

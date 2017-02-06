@@ -1,0 +1,23 @@
+<div role="dialog" tabindex="-1" 
+	class="slds-modal slds-fade-in-open" 
+	[ngClass]="{'slds-modal--large': large}"
+	*ngIf="show">
+	<div class="slds-modal__container">
+		<div class="slds-modal__header" *ngIf="!hideHeader">
+			<button (click)="closeModal();" class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+				<svg class="slds-button__icon slds-button__icon--large" aria-hidden="true">
+					<use [attr.xlink:href]="sldsConfig.sldsAssets + '/icons/utility-sprite/svg/symbols.svg#close'"></use>
+				</svg>
+				<span class="slds-assistive-text">Close</span>
+			</button>
+			<ng-content select="[slds-modal-title]"></ng-content>
+		</div>
+		<div class="slds-modal__content slds-p-around--medium">
+			<ng-content select="[slds-modal-content]"></ng-content>
+		</div>
+		<div class="slds-modal__footer" *ngIf="!hideFooter">
+			<ng-content select="[slds-modal-footer]"></ng-content>
+		</div>
+	</div>
+</div>
+<div class="slds-backdrop slds-backdrop--open" *ngIf="show"></div>

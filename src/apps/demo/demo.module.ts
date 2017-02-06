@@ -2,12 +2,13 @@ import { NgModule, ErrorHandler, Injector, Injectable, OpaqueToken } from '@angu
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { DemoComponent }  from './demo.component';
 import { HomeComponent }  from './components/home/home.component';
 import { AccountsComponent }  from './components/accounts/accounts.component';
 
-import { IAppConfig, APP_CONFIG, CONFIG } from './demo.config';
+import { APP_CONFIG, CONFIG } from './demo.config';
 
 import { SfdcService } from './../../services/sfdc.service';
 // import { SldsSpinnerComponent } from './../../slds/spinner/slds-spinner.component';
@@ -55,6 +56,7 @@ class MyErrorHandler implements ErrorHandler {
 		BrowserModule,
 		HttpModule,
 		RouterModule.forRoot(ROUTES, { useHash: true }),
+		FormsModule,
 		SldsModule
 	],
 	declarations: [

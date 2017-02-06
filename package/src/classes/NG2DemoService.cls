@@ -3,41 +3,41 @@ global with sharing class NG2DemoService implements ng2.GatewayInterface {
 	global static Map<String, Object> exec(String method, Object payload) {
 		Map<String, Object> outData = new Map<String, Object>();
 		Map<String, Object> inData = (Map<String, Object>)payload;
-		try {
-			if (method == 'getObjectsMetadata') {
-				List<String> objectTypes = (List<String>)JSON.deserialize(
-							JSON.serialize(inData.get('objectTypes')),
-							List<String>.class);
-				Map<String, MetadataDTO> metaList = new Map<String, MetadataDTO>();
-				for (String ot : objectTypes) {
-					metaList.put(ot, new MetadataDTO(ot));
-				}
-				outData.put('meta', metaList);
-			} else if (method == 'getAccounts') {
-				List<Account> accounts = [SELECT Id, Name, CreatedDate FROM Account ORDER BY CreatedDate DESC LIMIT 10000];
-				outData.put('accounts', accounts);
 
-			} else {
-				outData.put('error', 'Method "'+method+'" not found.');
+		/* getObjectsMetadata */
+		if (method == 'getObjectsMetadata') {
+			List<String> objectTypes = (List<String>)JSON.deserialize(
+						JSON.serialize(inData.get('objectTypes')),
+						List<String>.class);
+			Map<String, MetadataDTO> metaList = new Map<String, MetadataDTO>();
+			for (String ot : objectTypes) {
+				if (!Schema.getGlobalDescribe().containsKey(ot)) {
+					continue;
+				}
+				metaList.put(ot, new MetadataDTO(ot));
 			}
-		} catch(Exception e) {
-			outData.put('error', e.getMessage());
-			outData.put('stack', e.getStackTraceString());
+			outData.put('meta', metaList);
+
+		/* getAccounts */
+		} else if (method == 'getAccounts') {
+			List<Account> accounts = [
+				SELECT
+					Id, Name, CreatedDate, Type
+				FROM
+					Account
+				ORDER BY
+					CreatedDate
+				DESC
+				LIMIT 10];
+			outData.put('accounts', accounts);
+
+		/* method not found */
+		} else {
+			outData.put('error', 'Method "'+method+'" not found.');
 		}
 
 		return outData;
 
-	}
-
-	public static Map<String, Schema.DescribeFieldResult> getFieldMetadata(String objectType) {
-		Schema.DescribeSObjectResult dsr = Schema.getGlobalDescribe().get(objectType).getDescribe();
-		Map<String,Schema.DescribeFieldResult> finalMap = new Map<String, Schema.DescribeFieldResult>();
-		Map<String, Schema.SObjectField> objectFields = dsr.fields.getMap();
-		for(String field : objectFields.keySet()){
-			Schema.DescribeFieldResult dr = objectFields.get(field).getDescribe();
-			finalMap.put(field, dr);
-		}
-		return finalMap;
 	}
 
 	public class MetadataDTO {
@@ -81,5 +81,17 @@ global with sharing class NG2DemoService implements ng2.GatewayInterface {
 			isUpdateable = dsr.isUpdateable();
 		}
 	}
+
+	public static Map<String, Schema.DescribeFieldResult> getFieldMetadata(String objectType) {
+		Map<String,Schema.DescribeFieldResult> finalMap = new Map<String, Schema.DescribeFieldResult>();
+		Schema.DescribeSObjectResult dsr = Schema.getGlobalDescribe().get(objectType).getDescribe();
+		Map<String, Schema.SObjectField> objectFields = dsr.fields.getMap();
+		for(String field : objectFields.keySet()){
+			Schema.DescribeFieldResult dr = objectFields.get(field).getDescribe();
+			finalMap.put(field, dr);
+		}
+		return finalMap;
+	}
+
 
 }
