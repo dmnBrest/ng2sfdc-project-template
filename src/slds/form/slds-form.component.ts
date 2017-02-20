@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, Inject, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { SLDS_CONFIG, ISldsConfig } from './../slds.config';
 import { SfdcService, ObjectMatadataInterface } from './../../services/sfdc.service';
 import { SldsSpinnerService } from './../../slds/spinner/slds-spinner.service';
@@ -15,6 +16,11 @@ export class SldsFormComponent implements OnInit, OnDestroy {
 	@Input() sObjectFields: string[];
 	sObjectMetadata: ObjectMatadataInterface
 	sObjectFieldsMeta: any[];
+	frm: NgForm;
+	@Output() onFormInit = new EventEmitter<NgForm>();
+
+	@ViewChildren("frm")
+	public formsElements: QueryList<NgForm>	
 	
 	constructor(
 		private sfdcService: SfdcService,
@@ -41,7 +47,15 @@ export class SldsFormComponent implements OnInit, OnDestroy {
 				this.sldsSpinnerService.hideSpinner();
 				throw err;
 			});
-		}		
+		}
+	}
+
+	ngAfterViewInit(): void {
+		this.formsElements.changes.subscribe((comps: QueryList<NgForm>) => {
+			this.frm = comps.first;
+			console.log(this.frm);
+			this.onFormInit.emit(this.frm);
+		});
 	}
 
 	ngOnDestroy() {

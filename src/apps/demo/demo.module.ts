@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { DemoComponent }  from './demo.component';
 import { HomeComponent }  from './components/home/home.component';
 import { AccountsComponent }  from './components/accounts/accounts.component';
+import { TestObjectComponent }  from './components/full-object/full-object.component';
 
 import { APP_CONFIG, CONFIG } from './demo.config';
 
@@ -22,6 +23,7 @@ import { SldsModule } from './../../slds/slds.module';
 const ROUTES: Routes = [
 	{ path: 'home', component: HomeComponent },
 	{ path: 'accounts', component: AccountsComponent },	
+	{ path: 'full', component: TestObjectComponent },	
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 
@@ -62,7 +64,8 @@ class MyErrorHandler implements ErrorHandler {
 	declarations: [
 		DemoComponent,
 		AccountsComponent,
-		HomeComponent
+		HomeComponent,
+		TestObjectComponent
 	],
 	providers: [
 		SfdcService,

@@ -18,7 +18,7 @@
 			<td *ngFor="let f of sObjectFieldsMeta" data-label="Account Name">
 				<div class="slds-truncate" title="{{item[f.name]}}">
 					<slds-sobject-field 
-						[value]="item[f.name]" 
+						[ngModel]="item[f.name]" 
 						[sObjectType]="sObjectType" 
 						[sObjectField]="f.name"
 						[editable]="false">

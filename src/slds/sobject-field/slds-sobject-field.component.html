@@ -17,9 +17,41 @@
 	<span *ngSwitchCase="'currency'">{{value | currency:'USD':true}}</span>
 	<span *ngSwitchDefault>{{value}}</span>
 </span>
-<!--inputField -->
 
-(type: {{fieldMetadata?.type}})
+
+
+<!--inputField -->
 <span [ngSwitch]="fieldMetadata.type" *ngIf="editable && fieldMetadata">
-	<input *ngSwitchDefault [ngModel]="value" (ngModelChange)="onValueChange($event)" type="text" [id]="fieldMetadata.name" [name]="fieldMetadata.name" required class="slds-input" />
+	<!-- Number -->
+	<input 
+		*ngSwitchCase="'number'"
+		[ngModel]="value" 
+		(ngModelChange)="onValueChange($event)" 
+		type="number" 
+		[id]="fieldMetadata.name" 
+		[name]="fieldMetadata.name" 
+		class="slds-input" />	
+	<!-- Picklist -->
+	<div 
+		*ngSwitchCase="'picklist'"
+		class="slds-select_container">
+	<select 
+		[id]="fieldMetadata.name"
+		[name]="fieldMetadata.name"
+		[ngModel]="value" 
+		(ngModelChange)="onValueChange($event)" 
+		class="slds-select">
+			<option value>-select-</option>
+			<option *ngFor="let opt of fieldMetadata.picklistValues" [value]="opt.value">{{opt.label}}</option>
+	  </select>
+	</div>
+	<!-- Default: text input-->
+	<input 
+		*ngSwitchDefault 
+		[ngModel]="value" 
+		(ngModelChange)="onValueChange($event)" 
+		type="text" 
+		[id]="fieldMetadata.name" 
+		[name]="fieldMetadata.name" 
+		class="slds-input" />
 </span>

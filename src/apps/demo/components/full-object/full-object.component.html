@@ -8,7 +8,7 @@
 	<div class="slds-grid slds-m-bottom--medium">
 		<div class="slds-col">
 			<div class="slds-text-heading--medium" style="font-size: 1.5rem;">
-				Lightning Datatable for SObject (Account)
+				Lightning Datatable for SObject (Test_Object__c)
 			</div>
 		</div>
 		<div class="slds-col  slds-text-align--right">
@@ -21,34 +21,31 @@
 	</div>
 
 	<slds-datatable 
-		[items]="accounts" 
-		[sObjectType]="'Account'" 
-		[sObjectFields]="['Name', 'Type', 'CreatedDate']">
+		[items]="records" 
+		[sObjectType]="'Test_Object__c'" 
+		[sObjectFields]="testObjectFields">
 		<template #actions let-item="item">
-			<button class="slds-button slds-button--neutral" (click)="editAccount(item)">Edit</button>
-			<button class="slds-button slds-button--neutral" (click)="deleteAccount(item)">Delete</button>
+			<button class="slds-button slds-button--neutral" (click)="editRecord(item)">Edit</button>
+			<button class="slds-button slds-button--neutral" (click)="deleteRecord(item)">Delete</button>
 		</template>
 	</slds-datatable>
 
-	<slds-modal #editAccountModal [large]="false" [hideHeader]="false" [hideFooter]="false" >
+	<slds-modal #editRecordModal [large]="false" [hideHeader]="false" [hideFooter]="false" >
 		<div slds-modal-title>
 			<h2 class="slds-text-heading--medium">
-				Edit Account
+				Edit Record
 			</h2>
 		</div>
 		<div slds-modal-content>
 			<slds-form
-				*ngIf="accountToEdit"
-				[sObject]="accountToEdit"
-				[sObjectType]="'Account'"
-				[sObjectFields]="['Name', 'Type', 'CreatedDate']"
-				(onFormInit)="accountEditFormInit($event)"
+				*ngIf="recordToEdit"
+				[sObject]="recordToEdit"
+				[sObjectType]="'Test_Object__c'"
+				[sObjectFields]="testObjectFields"
+				(onFormInit)="recordEditFormInit($event)"
 			></slds-form>
 			<hr />
-			{{accountToEdit | json}}
-			<hr />
-			{{accountEditForm?.value | json}}
-			Valid: {{accountEditForm?.valid}}
+			{{recordToEdit | json}}
 		</div>
 		<div slds-modal-footer>
 			<button class="slds-button slds-button--neutral" (click)="saveAccount(accountToEdit)">Save</button>

@@ -5,21 +5,41 @@ import { SfdcService } from './../../../../services/sfdc.service';
 import { SldsSpinnerService } from './../../../../slds/spinner/slds-spinner.service';
 import { SldsNotificationService } from './../../../../slds/notification/slds-notification.service';
 import * as _ from 'lodash';
+
 import { SldsModalComponent } from './../../../../slds/modal/slds-modal.component'
 
 @Component({
-	selector: 'demo-accounts',
-	templateUrl: './accounts.component.html'
+	selector: 'full-sobject',
+	templateUrl: './full-object.component.html'
 })
 
-export class AccountsComponent implements OnInit {
+export class TestObjectComponent implements OnInit {
 
-	@ViewChild('editAccountModal')
-	private editAccountModal: SldsModalComponent;
+	@ViewChild('editRecordModal')
+	private editRecordModal: SldsModalComponent;
 
-	accounts: any[];
-	accountToEdit: any;
-	accountEditForm: NgForm;
+	records: any[];
+	recordToEdit: any;
+	recordEditForm: NgForm;
+	testObjectFields = [
+		'Name', 
+		'Account__c', 
+		'Contact__c', 
+		'Activation_Date__c', 
+		'When__c', 
+		'Email__c', 
+		'Is_Active__c', 
+		'Picklist__c', 
+		'MultiPicklist__c', 
+		'Number__c', 
+		'Percent__c', 
+		'Phone__c', 
+		'Point__c', 
+		'Textarea__c', 
+		'Textarea_Long__c', 
+		'Textarea_Rich__c', 
+		'Total__c', 
+		'Url__c'];
 
 	constructor(
 		private sfdcService: SfdcService,
@@ -30,12 +50,12 @@ export class AccountsComponent implements OnInit {
 
 	getAccounts(): void {
 		this.sldsSpinnerService.showSpinner();
-		this.sfdcService.remoteAction('NG2DemoService', 'getAccounts', {param1: 'test param1'})
+		this.sfdcService.remoteAction('NG2DemoService', 'getRecords', {})
 		.then((results) => {
 			this.sldsSpinnerService.hideSpinner();
 			console.log('Results:');
 			console.log(results);
-			this.accounts = results.data.accounts;
+			this.records = results.data.records;
 		})
 		.catch((err) => {
 			this.sldsSpinnerService.hideSpinner();
@@ -43,37 +63,36 @@ export class AccountsComponent implements OnInit {
 		});
 	}
 
-	accountEditFormInit(form: NgForm): void {
-		this.accountEditForm = form;
+	recordEditFormInit(form: NgForm): void {
+		this.recordEditForm = form;
 	}
 
-	editAccount(account: any): void {
-		console.log('Edit account: ', account);
-		this.accountToEdit = _.cloneDeep(account);
-		this.editAccountModal.openModal();
+	editRecord(record: any): void {
+		console.log('Edit record: ', record);
+		this.recordToEdit = _.cloneDeep(record);
+		this.editRecordModal.openModal();
 	}
 
-	deleteAccount(account: any): void {
-		console.log('Delete account: ', account);
+	deleteAccount(record: any): void {
+		console.log('Delete record: ', record);
 		alert('TODO');
 	}
 
 	saveAccount(account: any): void {
-		console.log('Save account: ', account);
+		console.log('Save record: ', account);
 		this.getAccounts();
-		this.accountToEdit = null;
-		this.editAccountModal.closeModal();
+		this.recordToEdit = null;
+		this.editRecordModal.closeModal();
 	} 
 
 	cancelAccountEditing(): void {
-		console.log('Cancel account editing');
-		this.accountToEdit = null;
-		this.editAccountModal.closeModal();
+		this.recordToEdit = null;
+		this.editRecordModal.closeModal();
 	} 
 
 
 	ngOnInit(): void {
-		console.log('AccountsComponent init');
+		console.log('TestObjectComponent init');
 		this.getAccounts();
 	}
 
