@@ -76,7 +76,8 @@ export class SfdcService {
 					console.log('RemoteAction '+service+'.'+method+':');
 					let resJson:RemoteActionResponseInterface = res.json();
 					if (resJson.error) {
-						console.error(resJson);
+						console.error(resJson.error);
+						console.error(resJson.stack);
 						throw resJson.error;
 					} else {
 						console.log(resJson);

@@ -48,7 +48,7 @@ export class TestObjectComponent implements OnInit {
 		@Inject(APP_CONFIG) private appConfig: IAppConfig
 	) { }
 
-	getAccounts(): void {
+	getRecords(): void {
 		this.sldsSpinnerService.showSpinner();
 		this.sfdcService.remoteAction('NG2DemoService', 'getRecords', {})
 		.then((results) => {
@@ -59,7 +59,7 @@ export class TestObjectComponent implements OnInit {
 		})
 		.catch((err) => {
 			this.sldsSpinnerService.hideSpinner();
-			console.error(err);
+			this.sldsNotificationService.showError(err);
 		});
 	}
 
@@ -73,14 +73,14 @@ export class TestObjectComponent implements OnInit {
 		this.editRecordModal.openModal();
 	}
 
-	deleteAccount(record: any): void {
+	deleteRecords(record: any): void {
 		console.log('Delete record: ', record);
 		alert('TODO');
 	}
 
-	saveAccount(account: any): void {
-		console.log('Save record: ', account);
-		this.getAccounts();
+	saveRecords(record: any): void {
+		console.log('Save record: ', record);
+		this.getRecords();
 		this.recordToEdit = null;
 		this.editRecordModal.closeModal();
 	} 
@@ -93,7 +93,7 @@ export class TestObjectComponent implements OnInit {
 
 	ngOnInit(): void {
 		console.log('TestObjectComponent init');
-		this.getAccounts();
+		this.getRecords();
 	}
 
 }
